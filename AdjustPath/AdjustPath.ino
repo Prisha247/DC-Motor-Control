@@ -18,8 +18,8 @@ void setup()  {
 int MotorSpeed = 75
 int CorrectionSpeed = 15
 
-leftMotor->setSpeed(MotorSpeed);
-rightMotor->setSpeed(MotorSpeed);
+leftMotor = setSpeed(MotorSpeed);
+rightMotor = setSpeed(MotorSpeed);
 
 
 void setup()  {
@@ -33,14 +33,21 @@ void VSensorL
 int VTapeMin = 0.1
 
 void loop() {  
+  //if car has drifted right, first back it up, then move forward by correcting the direction by increasing the speed of the left motor and then return to the original motor speed and move forward
   if VSensorR > VtapeMin {
-    leftMotor->setSpeed(MotorSpeed + CorrectionSpeed)
+    leftMotor = setSpeed(-1*MotorSpeed)
+    RightMotor = setSpeed(-1*MotorSpeed)
     delay(5)
-    leftMotor->setSpeed(MotorSpeed - CorrectionSpeed)
+    leftMotor = setSpeed(MotorSpeed + CorrectionSpeed)
+    delay(5)
+    leftMotor = setSpeed(MotorSpeed - CorrectionSpeed)
   }
+  //if car has drifted left, first back it up, then move forward by correcting the direction by increasing the speed of the right motor and then return to the original motor speed and move forward
     if VSensorL > VtapeMin {
-    rightMotor->setSpeed(MotorSpeed + CorrectionSpeed)
+    leftMotor = setSpeed(-1*MotorSpeed)
+    RightMotor = setSpeed(-1*MotorSpeed)
+    rightMotor = setSpeed(MotorSpeed + CorrectionSpeed)
     delay(5)
-    rightMotor->setSpeed(MotorSpeed - CorrectionSpeed)
+    rightMotor = setSpeed(MotorSpeed - CorrectionSpeed)
   }
 }
