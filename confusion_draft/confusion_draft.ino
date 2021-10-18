@@ -5,16 +5,16 @@
 
 //Create motor and motor shield objects
 Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
-Adafruit_DCMotor *leftMotor = AFMS.getMotor(1);
-Adafruit_DCMotor *rightMotor = AFMS.getMotor(2);
+Adafruit_DCMotor *leftMotor = AFMS.getMotor(3);
+Adafruit_DCMotor *rightMotor = AFMS.getMotor(4);
 
 //The point at which the sensor knows it is LEAVING the line
-int leftSensorThreshold = 512;
-int rightSensorThreshold = 512;
+int leftSensorThreshold = 65;
+int rightSensorThreshold = 62;
 
 //The point at which the sensor knows it HAS LEFT the line
-int leftSensorLow = 256;
-int rightSensorLow = 256;
+int leftSensorLow = 26;
+int rightSensorLow = 29;
 
 //Default speed for both motors
 int motorSpeed = 50;
