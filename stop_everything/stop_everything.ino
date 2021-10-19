@@ -17,8 +17,8 @@ void loop() {
   leftMotor->setSpeed(0);
   rightMotor->setSpeed(0);
 
-//  leftMotor->run(BACKWARD);
-//  rightMotor->run(BACKWARD);
+  leftMotor->run(FORWARD);
+  rightMotor->run(FORWARD);
 //
 //  leftMotor->setSpeed(150);
 //  rightMotor->setSpeed(150);
