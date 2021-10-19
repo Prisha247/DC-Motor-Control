@@ -17,8 +17,7 @@ int leftSensorLow = 50;
 int rightSensorLow = 50;
 
 //Default speed for both motors
-int rightMotorSpeed = 20;
-int leftMotorSpeed = 15;
+int rightMotorSpeed = 40; //20
 
 //Amount to change motor speed by when turning
 int motorDelta = 5;
@@ -34,8 +33,8 @@ int state = 0;
 void setup() {
   //Initialize motor controller and motors
   AFMS.begin();
-  leftMotor->setSpeed(15);
-  rightMotor->setSpeed(20);
+  leftMotor->setSpeed(100); //15
+  rightMotor->setSpeed(1); //20
 
   leftMotor->run(FORWARD);
   rightMotor->run(FORWARD);
@@ -53,9 +52,9 @@ void loop() {
   //If veering one direction, steer the other way
   case 0: driveStraight(); break;
 //  case 1: steerRight(); break;
-  case 2: correctRight(); break;
+//  case 2: correctRight(); break;
 //  case 3: steerLeft(); break;
-  case 4: correctLeft(); break;
+//  case 4: correctLeft(); break;
 
   default: error();
   }
@@ -86,13 +85,13 @@ int checkCase() { //Determines the state of the vehicle relative to the line
 //  if (l < leftSensorThreshold && l > leftSensorLow && r > rightSensorThreshold) return 1;
   
   //Off left
-  if (l < leftSensorLow && (r > rightSensorThreshold || state == 1)) return 2;
+//  if (l < leftSensorLow && (r > rightSensorThreshold || state == 1)) return 2;
   
   //Veering right
 //  if (l > leftSensorThreshold && r > rightSensorLow && r < rightSensorThreshold) return 3;
   
   //Off right
-  if (r < rightSensorLow && (l > leftSensorThreshold || state == 3)) return 4;
+//  if (r < rightSensorLow && (l > leftSensorThreshold || state == 3)) return 4;
   
   //Whoops!
   else return 5;
@@ -103,8 +102,10 @@ void driveStraight() {
   while (state == 0) {
 //    leftMotor->setSpeed(leftMotorSpeed);
 //    rightMotor->setSpeed(rightMotorSpeed);
-      leftMotor->setSpeed(15);
-      rightMotor->setSpeed(20);
+//      leftMotor->setSpeed(100); //15
+//      rightMotor->setSpeed(1); //20
+    leftMotor->run(FORWARD);
+    rightMotor->run(FORWARD);
     state = checkCase();
   }
 }
@@ -119,7 +120,7 @@ void driveStraight() {
 //}
 
 void correctRight() {
-  //Steer hard right when off the line to the left
+  //Steer hard right when off the line to the left; left wheel increase speed
   while (state == 2) {
     leftMotor->setSpeed(15);
     rightMotor->setSpeed(10);

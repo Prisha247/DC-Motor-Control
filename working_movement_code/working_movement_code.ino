@@ -4,8 +4,8 @@
 
 Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
 
-Adafruit_DCMotor *rightMotor = AFMS.getMotor(3);
-Adafruit_DCMotor *leftMotor = AFMS.getMotor(4);
+Adafruit_DCMotor *rightMotor = AFMS.getMotor(4);
+Adafruit_DCMotor *leftMotor = AFMS.getMotor(3);
 
 void setup()  {
   Serial.begin(9600);
@@ -14,11 +14,10 @@ void setup()  {
 }
 
 void loop() {
-  leftMotor->setSpeed(0);
-  rightMotor->setSpeed(0);
-
-//  leftMotor->run(BACKWARD);
-//  rightMotor->run(BACKWARD);
+  leftMotor->setSpeed(0); //22
+  rightMotor->setSpeed(0); //20
+  leftMotor->run(FORWARD);
+  rightMotor->run(FORWARD);
 //
 //  leftMotor->setSpeed(150);
 //  rightMotor->setSpeed(150);

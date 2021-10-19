@@ -4,8 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int VSensorL = A0;
-int VSensorR = A1;
+int SensorL = A0;
+int SensorR = A1;
 char outString;
 
 // Create the motor shield object with the default I2C address
@@ -25,18 +25,18 @@ void setup()  {
   AFMS.begin();
 
 
-  int MotorSpeed = 75;
+  int MotorSpeed = 40;
   int CorrectionSpeed = 15;
   
   leftMotor->setSpeed(MotorSpeed);
   rightMotor->setSpeed(MotorSpeed);
   
-//  void VSensorR
-//  void VSensorL
+//  void SensorR
+//  void SensorL
   int VTapeMin = 0.1;
 
-  pinMode(VSensorL, INPUT);
-  pinMode(VSensorR, INPUT);
+  pinMode(SensorL, INPUT);
+  pinMode(SensorR, INPUT);
   if (!AFMS.begin()) {         // create with the default frequency 1.6KHz
   // if (!AFMS.begin(1000)) {  // OR with a different frequency, say 1KHz
     Serial.println("Could not find Motor Shield. Check wiring.");
@@ -49,8 +49,8 @@ void setup()  {
 //  leftMotor->setSpeed(MotorSpeed);
 //  rightMotor->setSpeed(MotorSpeed);
 
-//  void VSensorR;
-//  void VSensorL;
+//  void SensorR;
+//  void SensorL;
 
   // Set the speed to start, from 0 (off) to 255 (max speed)
   leftMotor->setSpeed(40);
@@ -68,7 +68,7 @@ void loop() {
   int MotorSpeed = -30;
   int CorrectionSpeed = 15;
   
-  if (VSensorR > VTapeMin) {
+  if (SensorR > VTapeMin) {
     leftMotor->setSpeed(-1*MotorSpeed);
     RightMotor->setSpeed(-1*MotorSpeed);
     delay(5);
@@ -77,7 +77,7 @@ void loop() {
     leftMotor->setSpeed(MotorSpeed - CorrectionSpeed);
   }
   //if car has drifted left, first back it up, then move forward by correcting the direction by increasing the speed of the right motor and then return to the original motor speed and move forward
-    if (VSensorL > VTapeMin) {
+    if (SensorL > VTapeMin) {
     leftMotor->setSpeed(-1*MotorSpeed);
     RightMotor->setSpeed(-1*MotorSpeed);
     rightMotor->setSpeed(MotorSpeed + CorrectionSpeed);
