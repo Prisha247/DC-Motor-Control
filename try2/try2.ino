@@ -16,11 +16,19 @@ Adafruit_DCMotor *motor2 = AFMS.getMotor(4);
 #define lefts A1
 #define rights A0
 
+//The point at which the sensor knows it is LEAVING the line
+int leftSensorThreshold = 200;
+int rightSensorThreshold = 200;
+
+//The point at which the sensor knows it HAS LEFT the line
+int leftSensorLow = 50;
+int rightSensorLow = 50;
+
 void setup() {
   //setting the speed of motors
   AFMS.begin();
-  motor1->setSpeed(30);
-  motor2->setSpeed(30);
+  motor1->setSpeed(35);
+  motor2->setSpeed(35);
   //declaring pin types
   pinMode(lefts,INPUT);
   pinMode(rights,INPUT);
@@ -31,16 +39,23 @@ void setup() {
 
 void loop(){
   //printing values of the sensors to the serial monitor
-  Serial.println(analogRead(lefts));
+  Serial.print(analogRead(lefts));
+  Serial.print(",");
   Serial.println(analogRead(rights));
+
+   //Read IR sensors
+  int l = analogRead(lefts);
+  int r = analogRead(rights);
+  
   //line detected by both
-  if(analogRead(lefts)<=400 && analogRead(rights)<=400){
-    //stop
-    motor1->run(RELEASE);
-    motor2->run(RELEASE);
-  }
+//  if(l > leftSensorThreshold && r > rightSensorThreshold){
+//    //spin
+//    motor1->run(FORWARD);
+//    motor2->run(FORWARD);
+//  }
+  
   //line detected by left sensor
-  else if(analogRead(lefts)<=400 && !analogRead(rights)<=400){
+  if(r < rightSensorThreshold && l > leftSensorLow && l < leftSensorThreshold){
     //turn left
     motor1->run(BACKWARD);
     motor2->run(FORWARD);
@@ -50,7 +65,7 @@ void loop(){
      */
   }
   //line detected by right sensor
-  else if(!analogRead(lefts)<=400 && analogRead(rights)<=400){
+  else if(l < leftSensorThreshold && r > rightSensorLow && r < rightSensorThreshold){
     //turn right
     motor1->run(FORWARD);
     motor2->run(BACKWARD);
@@ -60,7 +75,7 @@ void loop(){
      */
   }
   //line detected by none
-  else if(!analogRead(lefts)<=400 && !analogRead(rights)<=400){
+  else if(l < leftSensorThreshold && r < rightSensorThreshold){
     //stop
     motor1->run(FORWARD);
     motor2->run(FORWARD);
