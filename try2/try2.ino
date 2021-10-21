@@ -27,22 +27,20 @@ int rightSensorThreshold = 200;
 //The point at which the sensor knows it HAS LEFT the line
 int leftSensorLow = 50;
 int rightSensorLow = 50;
-
+          
 // SERIAL PROTOCOL:
 // Format -> [cmd_char][num_value];
 // char 'a' means set a new left motor speed
 // char 'b' means set a new right motor speed
 // char 'l' means set a new left IR threshold value
 // char 'r' means set a new right IR threshold value
-// 'x' means start streaming IR values
-// 'y' means stop streaming IR values
 
 // Serial control variables
 char rx_byte;
 String rx_string = "";
 bool receiving_val = false;
 char last_cmd_received;
-String all_cmds = "ablrxy";
+String all_cmds = "ablr";
 bool streaming = false;
 bool plotStreaming = false;
 
@@ -63,11 +61,11 @@ void loop(){
   update_rx();
   
   //printing values of the sensors to the serial monitor
-//  Serial.print(analogRead(lefts));
-//  Serial.print(",");
-//  Serial.print(analogRead(rights));
-//  Serial.print(",");
-//  Serial.println(analogRead(rightMotorSpeed));
+  Serial.print(analogRead(lefts));
+  Serial.print(",");
+  Serial.print(analogRead(rights));
+  Serial.print(",");
+  Serial.println(analogRead(rightMotorSpeed));
 
    //Read IR sensors
   int l = analogRead(lefts);
@@ -145,12 +143,6 @@ void update_rx() {
         case 'r':
           set_right_threshold();
           break;
-        case 'x':
-          stream_start();
-          break;
-        case 'y':
-          stream_stop();
-          break;
       }
     } 
 
@@ -191,20 +183,5 @@ void set_right_threshold() {
   rightSensorThreshold = rx_string.toInt();
   Serial.print("Right IR threshold value set to ");
   Serial.println(rightSensorThreshold);
-  return;
-}
-
-// Start streaming IR values
-void stream_start() {
-  streaming = true;
-  Serial.println("Streaming enabled");
-  return;
-}
-
-
-// Stop streaming IR values
-void stream_stop() {
-  streaming = false;
-  Serial.println("Streaming disabled");
   return;
 }
