@@ -1,18 +1,20 @@
 import serial
+import time
 
-# Setting Arduino parameters
-arduinoComPort="/dev/cu.usbmodem101" # fill out later
-baudRate = 9600
-serialPort = serial.Serial(arduinoComPort, baudRate, timeout=1)
+ser = serial.Serial('COM13', 9600)
+ser.close()
+ser.open()
 
-with open('data.csv', 'a') as f:
-    f.write('left,right\n')
+start = time.time()
+with open('data.csv', 'w') as f:
+    f.write('left,right,speed\n')
     while(True):
-        lineOfData = serialPort.readline().decode()
+        lineOfData = ser.readline().decode()
         if len(lineOfData)>0:
-            try:    
-                left, right = [x for x in lineOfData.split(' ')]
-                f.write(f'{left},{right}')
-            except:
-                f.close()
-                break
+            left_sensor, right_sensor, motor_speed = [x for x in lineOfData.split(' ')]
+            f.write(f'{left_sensor},{right_sensor},{motor_speed}')
+        if time.time() >= 30 + start:
+            f.close()
+            break
+
+
