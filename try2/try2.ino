@@ -1,6 +1,3 @@
-//I have added the possibilities of testing
-//The values of analogRead could be changed for trouble shooting
-
 //including the libraries
 //Include requisite libraries
 #include <Wire.h>
@@ -36,13 +33,13 @@ int rightSensorLow = 50;
 // char 'r' means set a new right IR threshold value
 
 // Serial control variables
-char rx_byte;
-String rx_string = "";
-bool receiving_val = false;
-char last_cmd_received;
-String all_cmds = "ablr";
-bool streaming = false;
-bool plotStreaming = false;
+//char rx_byte;
+//String rx_string = "";
+//bool receiving_val = false;
+//char last_cmd_received;
+//String all_cmds = "ablr";
+//bool streaming = false;
+//bool plotStreaming = false;
 
 void setup() {
   //setting the speed of motors
@@ -52,20 +49,32 @@ void setup() {
   //declaring pin types
   pinMode(lefts,INPUT);
   pinMode(rights,INPUT);
-  //begin serial communication
-  Serial.begin(9600);
   
+  //begin serial communication
+  Serial.begin(9600);  
 }
 
 void loop(){
-  update_rx();
+  
+  if (Serial.available()>0)
+    {
+      int speed = Serial.parseInt();
+      Serial.println(speed);
+      if (speed >= 0 && speed <= 255)
+      {
+        motor1->setSpeed(speed);
+        motor2->setSpeed(speed);
+      }
+    }
+  
+//  update_rx();
   
   //printing values of the sensors to the serial monitor
-  Serial.print(analogRead(lefts));
-  Serial.print(",");
-  Serial.print(analogRead(rights));
-  Serial.print(",");
-  Serial.println(analogRead(rightMotorSpeed));
+//  Serial.print(analogRead(lefts));
+//  Serial.print(",");
+//  Serial.print(analogRead(rights));
+//  Serial.print(",");
+//  Serial.println(analogRead(rightMotorSpeed));
 
    //Read IR sensors
   int l = analogRead(lefts);
@@ -111,77 +120,77 @@ void loop(){
   
 }
 
-void update_rx() {
-
-  // While there character available to read
-  while (Serial.available()) {
-    rx_byte = Serial.read();
-
-    // Check for a valid command
-    if (!receiving_val) {
-      if (all_cmds.indexOf(rx_byte) > -1) {
-        last_cmd_received = rx_byte;
-        rx_string = "";
-        receiving_val = true;
-      }
-    } 
-    // If the command is complete, start processing
-    else if (rx_byte == ';') {
-      receiving_val = false;
-
-      // Call the respective method based on the command
-      switch (last_cmd_received) {
-        case 'a':
-          set_left_motor_speed();
-          break;
-        case 'b':
-          set_right_motor_speed();
-          break;
-        case 'l':
-          set_left_threshold();
-          break;
-        case 'r':
-          set_right_threshold();
-          break;
-      }
-    } 
-
-    // If a number is typed, store it
-    else if (isdigit(rx_byte)) {
-      rx_string += rx_byte;
-    }
-  }
-}
-
-// Set the speed of the left motor
-void set_left_motor_speed() {
-  leftMotorSpeed = rx_string.toInt();
-  Serial.print("Left motor speed set to ");
-  Serial.println(leftMotorSpeed);
-  return;
-}
-
-// Set the speed of the right motor
-void set_right_motor_speed() {
-  rightMotorSpeed = rx_string.toInt();
-  Serial.print("Right motor speed set to ");
-  Serial.println(rightMotorSpeed);
-  return;
-}
-
-// Set the left IR threshold value
-void set_left_threshold() {
-  leftSensorThreshold = rx_string.toInt();
-  Serial.print("Left IR threshold value set to ");
-  Serial.println(leftSensorThreshold);
-  return;
-}
-
-
-// Set the right IR cutoff value
-void set_right_threshold() {
-  rightSensorThreshold = rx_string.toInt();
-  Serial.print("Right IR threshold value set to ");
-  Serial.println(rightSensorThreshold);
-  return;
-}
+//void update_rx() {
+//
+//  // While there character available to read
+//  while (Serial.available()) {
+//    rx_byte = Serial.read();
+//
+//    // Check for a valid command
+//    if (!receiving_val) {
+//      if (all_cmds.indexOf(rx_byte) > -1) {
+//        last_cmd_received = rx_byte;
+//        rx_string = "";
+//        receiving_val = true;
+//      }
+//    } 
+//    // If the command is complete, start processing
+//    else if (rx_byte == ';') {
+//      receiving_val = false;
+//
+//      // Call the respective method based on the command
+//      switch (last_cmd_received) {
+//        case 'a':
+//          set_left_motor_speed();
+//          break;
+//        case 'b':
+//          set_right_motor_speed();
+//          break;
+//        case 'l':
+//          set_left_threshold();
+//          break;
+//        case 'r':
+//          set_right_threshold();
+//          break;
+//      }
+//    } 
+//
+//    // If a number is typed, store it
+//    else if (isdigit(rx_byte)) {
+//      rx_string += rx_byte;
+//    }
+//  }
+//}
+//
+//// Set the speed of the left motor
+//void set_left_motor_speed() {
+//  leftMotorSpeed = rx_string.toInt();
+//  Serial.print("Left motor speed set to ");
+//  Serial.println(leftMotorSpeed);
+//  return;
+//}
+//
+//// Set the speed of the right motor
+//void set_right_motor_speed() {
+//  rightMotorSpeed = rx_string.toInt();
+//  Serial.print("Right motor speed set to ");
+//  Serial.println(rightMotorSpeed);
+//  return;
+//}
+//
+//// Set the left IR threshold value
+//void set_left_threshold() {
+//  leftSensorThreshold = rx_string.toInt();
+//  Serial.print("Left IR threshold value set to ");
+//  Serial.println(leftSensorThreshold);
+//  return;
+//}
+//
+//
+//// Set the right IR cutoff value
+//void set_right_threshold() {
+//  rightSensorThreshold = rx_string.toInt();
+//  Serial.print("Right IR threshold value set to ");
+//  Serial.println(rightSensorThreshold);
+//  return;
+//}
